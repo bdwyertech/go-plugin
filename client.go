@@ -1256,7 +1256,14 @@ func (c *Client) logStderr(name string, r io.Reader) {
 			}
 
 			out := flattenKVPairs(entry.KVPairs)
-			out = append(out, "timestamp", entry.Timestamp.Format(hclog.TimeFormat))
+
+			// https://github.com/hashicorp/go-plugin/pull/263
+			if !entry.Timestamp.IsZero() {
+				// no point in including a zero timestamp
+				// this can happen if the upstream logger has DisableTime set to true
+				out = append(out, "timestamp", entry.Timestamp.Format(hclog.TimeFormat))
+			}
+
 			switch logLevel {
 			case hclog.Trace:
 				l.Trace(entry.Message, out...)
