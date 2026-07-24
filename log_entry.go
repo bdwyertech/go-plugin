@@ -4,8 +4,9 @@
 package plugin
 
 import (
-	"encoding/json"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 // logEntry is the JSON payload that gets sent to Stderr from the plugin to the host
